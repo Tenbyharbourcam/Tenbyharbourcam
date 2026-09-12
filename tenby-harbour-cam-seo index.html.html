@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tenby Harbour Webcam – Live 24/7 | Tenby Harbour Cam</title>
+
+  <meta name="description" content="Watch the Tenby Harbour webcam live 24/7 from Pembrokeshire, Wales. See Tenby Harbour, boats, sea conditions and the famous coastline in real time." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://tenbyharbourcam.com/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Tenby Harbour Cam" />
+  <meta property="og:title" content="Tenby Harbour Webcam – Live 24/7" />
+  <meta property="og:description" content="Watch Tenby Harbour live from Pembrokeshire, Wales. A 24/7 webcam showing the harbour, boats, sea conditions and coastline." />
+  <meta property="og:url" content="https://tenbyharbourcam.com/" />
+  <meta property="og:locale" content="en_GB" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tenby Harbour Webcam – Live 24/7" />
+  <meta name="twitter:description" content="Watch Tenby Harbour live 24/7 from Pembrokeshire, Wales." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Tenby Harbour Webcam – Live 24/7",
+    "url": "https://tenbyharbourcam.com/",
+    "description": "Live 24/7 webcam overlooking Tenby Harbour in Pembrokeshire, Wales.",
+    "about": {
+      "@type": "Place",
+      "name": "Tenby Harbour",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Tenby",
+        "addressRegion": "Pembrokeshire",
+        "addressCountry": "GB"
+      }
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0d1f2d;
+      --deep: #091520;
+      --teal: #1a7a8a;
+      --teal-light: #2aa8bc;
+      --sand: #e8dcc8;
+      --sand-light: #f5efe3;
+      --chalk: #f9f6f0;
+      --rust: #c0522a;
+      --gold: #c8973a;
+      --mist: rgba(26, 122, 138, 0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--deep);
+      color: var(--sand);
+      font-family: 'Libre Baskerville', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy);
+      border-bottom: 1px solid rgba(26,122,138,0.3);
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--chalk);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-text span {
+      color: var(--teal-light);
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sand);
+      opacity: 0.85;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #e74c3c;
+      border-radius: 50%;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* ── HERO / STREAM ── */
+    .hero {
+      position: relative;
+      padding: 0;
+      background: var(--deep);
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 1.5rem;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--chalk);
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--teal-light);
+    }
+
+    .hero-sub {
+      font-size: 0.9rem;
+      color: var(--sand);
+      opacity: 0.6;
+      font-style: italic;
+      margin-bottom: 1.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* Stream container */
+    .stream-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #060f17;
+      border: 1px solid rgba(26,122,138,0.25);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .stream-wrap iframe,
+    .stream-wrap video {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Placeholder shown when no stream URL is set */
+    .stream-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: radial-gradient(ellipse at center, #0d2535 0%, #060f17 70%);
+    }
+
+    .stream-placeholder svg {
+      opacity: 0.25;
+      width: 64px;
+    }
+
+    .stream-placeholder p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    /* Wave overlay at bottom of stream */
+    .wave-divider {
+      position: relative;
+      height: 48px;
+      overflow: hidden;
+      margin-top: -2px;
+    }
+
+    .wave-divider svg {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+
+    /* ── INFO STRIP ── */
+    .info-strip {
+      background: var(--navy);
+      border-top: 1px solid rgba(26,122,138,0.2);
+      border-bottom: 1px solid rgba(26,122,138,0.2);
+    }
+
+    .info-strip-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.9rem 2rem;
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--sand);
+      opacity: 0.7;
+    }
+
+    .info-item svg {
+      color: var(--teal-light);
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+
+    /* ── SPONSORS ── */
+    .sponsors-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3.5rem 2rem 4rem;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      opacity: 0.8;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--chalk);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-desc {
+      font-size: 0.88rem;
+      color: var(--sand);
+      opacity: 0.6;
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .sponsors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+    }
+
+    /* Filled sponsor card */
+    .sponsor-card {
+      background: var(--navy);
+      border: 1px solid rgba(26,122,138,0.2);
+      border-radius: 4px;
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sponsor-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .sponsor-card:hover {
+      border-color: rgba(26,122,138,0.5);
+      transform: translateY(-2px);
+    }
+
+    .sponsor-card:hover::before {
+      opacity: 1;
+    }
+
+    .sponsor-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      opacity: 0.7;
+    }
+
+    .sponsor-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--chalk);
+      line-height: 1.2;
+    }
+
+    .sponsor-desc {
+      font-size: 0.8rem;
+      color: var(--sand);
+      opacity: 0.55;
+      line-height: 1.6;
+    }
+
+    .sponsor-link-label {
+      margin-top: 0.4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--teal-light);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Available slot card */
+    .sponsor-slot {
+      background: transparent;
+      border: 1px dashed rgba(26,122,138,0.25);
+      border-radius: 4px;
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      text-align: center;
+      min-height: 160px;
+      cursor: default;
+    }
+
+    .sponsor-slot-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(26,122,138,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--teal-light);
+      opacity: 0.5;
+    }
+
+    .sponsor-slot p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sand);
+      opacity: 0.35;
+      line-height: 1.6;
+    }
+
+    .sponsor-slot a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--teal-light);
+      opacity: 0.7;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(42,168,188,0.3);
+      padding-bottom: 1px;
+      transition: opacity 0.2s;
+    }
+
+    .sponsor-slot a:hover { opacity: 1; }
+
+    /* ── ABOUT STRIP ── */
+    .about-strip {
+      background: var(--navy);
+      border-top: 1px solid rgba(26,122,138,0.15);
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    @media (max-width: 640px) {
+      .about-inner { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    .about-block h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--chalk);
+      margin-bottom: 0.6rem;
+    }
+
+    .about-block p {
+      font-size: 0.85rem;
+      color: var(--sand);
+      opacity: 0.6;
+      line-height: 1.8;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(26,122,138,0.15);
+      padding: 1.4rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--sand);
+      opacity: 0.35;
+      text-transform: uppercase;
+    }
+
+    .footer-enquire {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--teal-light);
+      opacity: 0.65;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(42,168,188,0.25);
+      padding-bottom: 1px;
+      transition: opacity 0.2s;
+    }
+
+    .footer-enquire:hover { opacity: 1; }
+
+    /* Clock */
+    #clock {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--sand);
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 22 Q8 16 16 18 Q24 20 28 14" stroke="#2aa8bc" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M4 26 Q8 20 16 22 Q24 24 28 18" stroke="#1a7a8a" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+      <circle cx="16" cy="10" r="4" stroke="#c8973a" stroke-width="1.5" fill="none"/>
+      <line x1="16" y1="6" x2="16" y2="3" stroke="#c8973a" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">Tenby <span>Harbour</span> Cam</span>
+  </div>
+  <div class="live-badge">
+    <div class="live-dot"></div>
+    Live · Pembrokeshire
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">Tenby Harbour <em>Live Webcam</em></h1>
+    <p class="hero-sub">Watch the Tenby Harbour webcam live 24 hours a day from Pembrokeshire, Wales.</p>
+
+    <div class="stream-wrap">
+      <!--
+        ════════════════════════════════════════════════
+        TO EMBED YOUR STREAM:
+
+        Option A — YouTube Live:
+          Replace the src below with your YouTube embed URL
+          e.g. src="https://www.youtube.com/embed/LIVE_STREAM_ID?autoplay=1"
+
+        Option B — Direct HLS/RTSP via a relay service (e.g. Restream, IPCamLive):
+          Replace the iframe with a <video> tag pointing to your HLS .m3u8 URL
+
+        Option C — iFrame from IPCamLive or similar:
+          Use the embed code they provide
+        ════════════════════════════════════════════════
+      -->
+      <iframe
+        id="stream-frame"
+        src="about:blank"
+        allowfullscreen
+        allow="autoplay; fullscreen"
+        style="display:none">
+      </iframe>
+
+      <!-- Placeholder shown until stream URL is configured -->
+      <div class="stream-placeholder" id="placeholder">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="14" width="56" height="36" rx="3" stroke="#2aa8bc" stroke-width="2"/>
+          <circle cx="32" cy="32" r="10" stroke="#2aa8bc" stroke-width="2"/>
+          <circle cx="32" cy="32" r="3" fill="#2aa8bc"/>
+          <line x1="32" y1="50" x2="32" y2="56" stroke="#2aa8bc" stroke-width="2"/>
+          <line x1="22" y1="56" x2="42" y2="56" stroke="#2aa8bc" stroke-width="2"/>
+        </svg>
+        <p>Stream will appear here<br>· Configure your RTSP/YouTube URL to go live ·</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wave-divider">
+    <svg viewBox="0 0 1200 48" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 48 L0 28 Q150 8 300 22 Q450 36 600 20 Q750 4 900 18 Q1050 32 1200 16 L1200 48 Z" fill="#0a1825"/>
+    </svg>
+  </div>
+</div>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-strip-inner">
+    <div class="info-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span id="clock">--:--:--</span>
+    </div>
+    <div class="info-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Tenby Harbour, Pembrokeshire, Wales
+    </div>
+    <div class="info-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      24/7 Live Stream · 4K
+    </div>
+  </div>
+</div>
+
+<!-- SPONSORS -->
+<div class="sponsors-section">
+  <p class="section-label">Proudly supported by</p>
+  <h2 class="section-title">Local Business Sponsors</h2>
+  <p class="section-desc">The businesses below make this free live stream possible. Please support them when visiting Tenby.</p>
+
+  <div class="sponsors-grid">
+
+    <!-- ─── EXAMPLE SPONSOR CARD (duplicate & fill in for real sponsors) ─── -->
+    <a class="sponsor-card" href="https://example.com" target="_blank" rel="noopener">
+      <span class="sponsor-tag">Boat Hire</span>
+      <span class="sponsor-name">Tenby Boat Trips</span>
+      <span class="sponsor-desc">Daily trips around Caldey Island and Tenby's famous coastline. Family-friendly, all year round.</span>
+      <span class="sponsor-link-label">
+        Visit website
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </span>
+    </a>
+
+    <!-- ─── AVAILABLE SLOTS ─── -->
+    <div class="sponsor-slot">
+      <div class="sponsor-slot-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <p>Sponsor slot available<br>from £50 / month</p>
+      <a href="mailto:your@email.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
+    </div>
+
+    <div class="sponsor-slot">
+      <div class="sponsor-slot-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <p>Sponsor slot available<br>from £50 / month</p>
+      <a href="mailto:your@email.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
+    </div>
+
+    <div class="sponsor-slot">
+      <div class="sponsor-slot-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <p>Sponsor slot available<br>from £50 / month</p>
+      <a href="mailto:your@email.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- SEO CONTENT -->
+<div class="sponsors-section" style="padding-top:1.5rem;">
+  <p class="section-label">Tenby webcam</p>
+  <h2 class="section-title">Live Tenby Harbour Webcam</h2>
+  <p class="section-desc" style="max-width:760px; margin-bottom:0;">
+    Watch Tenby Harbour live from the heart of Pembrokeshire. This 24/7 Tenby webcam shows the harbour, boats,
+    sea conditions and coastline in real time, making it useful for visitors, locals, sailors and anyone checking
+    the weather before heading into Tenby.
+  </p>
+</div>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip">
+  <div class="about-inner">
+    <div class="about-block">
+      <h3>About this camera</h3>
+      <p>This independent Tenby webcam streams Tenby Harbour live 24 hours a day from Pembrokeshire, Wales. Use the live camera to check the harbour, visiting boats, sea conditions, weather and the famous Tenby coastline in real time.</p>
+    </div>
+    <div class="about-block">
+      <h3>Advertise here</h3>
+      <p>Sponsor slots give your business a permanent, clickable card on this page — seen by locals, tourists, sailors, and weather-watchers every day. Email us to discuss rates and availability.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">&copy; <span id="year"></span> Tenby Harbour Cam · Pembrokeshire, Wales</span>
+  <a class="footer-enquire" href="mailto:your@email.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Sponsorship enquiries →</a>
+</footer>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Europe/London' }) + ' GMT';
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ─────────────────────────────────────────────────────────
+  // TO ACTIVATE YOUR STREAM:
+  // Set STREAM_URL to your YouTube embed URL or HLS stream URL
+  // e.g. "https://www.youtube.com/embed/YOUR_STREAM_ID?autoplay=1&mute=1"
+  // ─────────────────────────────────────────────────────────
+  const STREAM_URL = 'https://www.youtube.com/embed/WZzyh3hDkoA?autoplay=1&mute=1&playsinline=1&rel=0'; // YouTube live stream
+
+  if (STREAM_URL) {
+    const frame = document.getElementById('stream-frame');
+    const placeholder = document.getElementById('placeholder');
+    frame.src = STREAM_URL;
+    frame.style.display = 'block';
+    placeholder.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
