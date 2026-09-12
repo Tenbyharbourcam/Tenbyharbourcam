@@ -595,6 +595,29 @@
       }
     }
 
+  
+    /* Visitor counter */
+    .visitor-counter {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: .8rem 2rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: .55rem;
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--sand);
+      opacity: .7;
+    }
+    .visitor-counter strong {
+      color: var(--teal-light);
+      font-weight: 500;
+      opacity: 1;
+    }
+
   </style>
 </head>
 <body>
@@ -666,6 +689,10 @@
         </svg>
         <p>Stream will appear here<br>· Configure your RTSP/YouTube URL to go live ·</p>
       </div>
+    </div>
+    <div class="visitor-counter" aria-label="Website visitor count">
+      <span>Visitors</span>
+      <strong id="visitorCount">—</strong>
     </div>
   </div>
 
@@ -955,6 +982,30 @@
     window.addEventListener('resize', () => {
       if (isExpanded()) window.scrollTo(0, 0);
     });
+  })();
+
+  // Public website visitor counter.
+  // Counts page loads across visitors/devices; service availability is external.
+  (() => {
+    const el = document.getElementById('visitorCount');
+    if (!el) return;
+
+    const endpoint = 'https://api.counterapi.dev/v1/tenbyharbourcam.com/home/up';
+
+    fetch(endpoint, { cache: 'no-store' })
+      .then(r => {
+        if (!r.ok) throw new Error('Counter unavailable');
+        return r.json();
+      })
+      .then(data => {
+        const value = data.count ?? data.value;
+        if (typeof value !== 'number') throw new Error('Invalid counter response');
+        el.textContent = value.toLocaleString('en-GB');
+      })
+      .catch(() => {
+        el.textContent = '—';
+        el.title = 'Visitor counter temporarily unavailable';
+      });
   })();
 
 </script>
