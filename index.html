@@ -618,6 +618,48 @@
       opacity: 1;
     }
 
+  
+    /* Tenby weather & tides */
+    .conditions-panel {
+      max-width: 1100px;
+      margin: .9rem auto 0;
+      padding: 0 2rem;
+    }
+    .conditions-card {
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.035);
+      border-radius: 10px;
+      padding: 1rem;
+      overflow: hidden;
+    }
+    .conditions-title {
+      margin: 0 0 .75rem;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--sand);
+      opacity: .85;
+    }
+    .conditions-source {
+      margin: .65rem 0 0;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: .56rem;
+      letter-spacing: .04em;
+      color: rgba(255,255,255,.5);
+    }
+    .conditions-source a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    @media (max-width: 600px) {
+      .conditions-panel { padding: 0 1rem; }
+      .conditions-card { padding: .75rem; }
+    }
+
   </style>
 </head>
 <body>
@@ -693,6 +735,20 @@
     <div class="visitor-counter" aria-label="Website visitor count">
       <span>Visitors</span>
       <strong id="visitorCount">—</strong>
+    </div>
+
+    <div class="conditions-panel" aria-label="Today's Tenby weather and tide times">
+      <div class="conditions-card">
+        <div class="conditions-title">Today's Weather &amp; Tides · Tenby</div>
+        <div class="uktides-widget"
+             data-beach="tenby"
+             data-theme="dark"
+             data-show="tide,airtemp,weather"></div>
+        <div class="conditions-source">
+          Live tide and weather information ·
+          <a href="https://uktidetimes.lovable.app/" target="_blank" rel="noopener">UK Tide Times</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1009,6 +1065,8 @@
   })();
 
 </script>
+
+  <script src="https://uktidetimes.lovable.app/widget.js" async></script>
 
 </body>
 </html>
