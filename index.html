@@ -38,7 +38,35 @@
       }
     }
   }
-  </script>
+  
+(() => {
+ const l=document.getElementById('cameraZoomLayer'),f=document.getElementById('stream-frame'),h=document.getElementById('zoomHint');
+ let z=1,x=0,y=0,z0=1,x0=0,y0=0,d0=0,m0=null,drag=null,last=0;
+ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+ const dist=(a,b)=>Math.hypot(b.clientX-a.clientX,b.clientY-a.clientY);
+ const mid=(a,b)=>({x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2});
+ function apply(){
+   const r=l.getBoundingClientRect(),bx=Math.max(0,r.width*(z-1)/2),by=Math.max(0,r.height*(z-1)/2);
+   x=clamp(x,-bx,bx); y=clamp(y,-by,by);
+   f.style.transform=`translate(${x}px,${y}px) scale(${z})`;
+   h.textContent=z>1.01?`${z.toFixed(1)}× · drag to move · double-tap to reset`:'Pinch to zoom · drag to move · double-tap to reset';
+ }
+ l.addEventListener('touchstart',e=>{
+   e.preventDefault();
+   if(e.touches.length===2){d0=dist(e.touches[0],e.touches[1]);z0=z;x0=x;y0=y;m0=mid(e.touches[0],e.touches[1]);}
+   else if(e.touches.length===1)drag={cx:e.touches[0].clientX,cy:e.touches[0].clientY,x,y};
+ },{passive:false});
+ l.addEventListener('touchmove',e=>{
+   e.preventDefault();
+   if(e.touches.length===2&&d0){const m=mid(e.touches[0],e.touches[1]);z=clamp(z0*dist(e.touches[0],e.touches[1])/d0,1,6);x=x0+m.x-m0.x;y=y0+m.y-m0.y;apply();}
+   else if(e.touches.length===1&&drag&&z>1){x=drag.x+e.touches[0].clientX-drag.cx;y=drag.y+e.touches[0].clientY-drag.cy;apply();}
+ },{passive:false});
+ l.addEventListener('touchend',e=>{
+   if(!e.touches.length){d0=0;m0=null;drag=null;const n=Date.now();if(n-last<320){z=1;x=0;y=0;apply();last=0}else last=n;}
+ },{passive:false});
+ apply();
+})();
+</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -499,7 +527,11 @@
       color: var(--sand);
       opacity: 0.5;
     }
-  </style>
+  
+.camera-zoom-layer{position:absolute;inset:0;z-index:5;touch-action:none}
+#stream-frame{transform-origin:center;will-change:transform}
+.zoom-hint{position:absolute;z-index:6;right:10px;bottom:10px;padding:7px 10px;background:rgba(6,15,23,.72);color:#fff;font:10px 'DM Mono',monospace;pointer-events:none}
+</style>
 </head>
 <body>
 
@@ -549,6 +581,8 @@
         allow="autoplay; fullscreen"
         style="display:none">
       </iframe>
+      <div class="camera-zoom-layer" id="cameraZoomLayer"></div>
+      <div class="zoom-hint" id="zoomHint">Pinch to zoom · drag to move · double-tap to reset</div>
 
       <!-- Placeholder shown until stream URL is configured -->
       <div class="stream-placeholder" id="placeholder">
