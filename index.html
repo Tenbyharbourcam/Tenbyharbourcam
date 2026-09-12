@@ -529,6 +529,72 @@
       pointer-events: none;
     }
 
+  
+    /* Full-screen camera mode */
+    .camera-fullscreen-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 30;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 6px;
+      background: rgba(6,15,23,.78);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .camera-fullscreen-btn svg {
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+    }
+
+    .stream-wrap.camera-fullscreen {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100dvh !important;
+      max-width: none !important;
+      aspect-ratio: auto !important;
+      z-index: 99999 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: #000 !important;
+      margin: 0 !important;
+    }
+
+    .stream-wrap.camera-fullscreen iframe {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    body.camera-fullscreen-open {
+      overflow: hidden !important;
+      overscroll-behavior: none;
+    }
+
+    .stream-wrap.camera-fullscreen .camera-fullscreen-btn {
+      top: max(10px, env(safe-area-inset-top));
+      right: max(10px, env(safe-area-inset-right));
+    }
+
+    .stream-wrap.camera-fullscreen .zoom-hint {
+      right: max(10px, env(safe-area-inset-right));
+      bottom: max(10px, env(safe-area-inset-bottom));
+    }
+
+    @media (orientation: landscape) {
+      .stream-wrap.camera-fullscreen {
+        width: 100vw !important;
+        height: 100dvh !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -581,6 +647,13 @@
       </iframe>
       <div class="camera-zoom-layer" id="cameraZoomLayer" aria-label="Pinch to zoom live camera"></div>
       <div class="zoom-hint" id="zoomHint">Pinch to zoom · drag to move · double-tap to reset</div>
+
+      <button class="camera-fullscreen-btn" id="cameraFullscreenBtn" type="button" aria-label="Expand camera to full screen" title="Full screen">
+        <svg id="fullscreenIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/>
+        </svg>
+      </button>
+
 
       <!-- Placeholder shown until stream URL is configured -->
       <div class="stream-placeholder" id="placeholder">
@@ -646,7 +719,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </div>
       <p>Sponsor slot available<br>from £50 / month</p>
-      <a href="mailto:your@email.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
+      <a href="mailto:dkcsharris@gmail.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
     </div>
 
     <div class="sponsor-slot">
@@ -654,7 +727,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </div>
       <p>Sponsor slot available<br>from £50 / month</p>
-      <a href="mailto:your@email.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
+      <a href="mailto:dkcsharris@gmail.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
     </div>
 
     <div class="sponsor-slot">
@@ -662,7 +735,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </div>
       <p>Sponsor slot available<br>from £50 / month</p>
-      <a href="mailto:your@email.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
+      <a href="mailto:dkcsharris@gmail.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Enquire now</a>
     </div>
 
   </div>
@@ -697,7 +770,7 @@
 <!-- FOOTER -->
 <footer>
   <span class="footer-copy">&copy; <span id="year"></span> Tenby Harbour Cam · Pembrokeshire, Wales</span>
-  <a class="footer-enquire" href="mailto:your@email.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Sponsorship enquiries →</a>
+  <a class="footer-enquire" href="mailto:dkcsharris@gmail.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Sponsorship enquiries →</a>
 </footer>
 
 <script>
@@ -817,6 +890,71 @@
     }, { passive: false });
 
     applyTransform();
+  })();
+
+  // Full-screen camera button. Uses browser fullscreen when supported,
+  // with a viewport-filling fallback that works well on iPhone/iPad.
+  (() => {
+    const wrap = document.querySelector('.stream-wrap');
+    const btn = document.getElementById('cameraFullscreenBtn');
+    const icon = document.getElementById('fullscreenIcon');
+    if (!wrap || !btn) return;
+
+    const expandPath = '<path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/>';
+    const collapsePath = '<path d="M3 8h5V3M21 8h-5V3M3 16h5v5M21 16h-5v5"/>';
+
+    function setExpanded(on) {
+      wrap.classList.toggle('camera-fullscreen', on);
+      document.body.classList.toggle('camera-fullscreen-open', on);
+      btn.setAttribute('aria-label', on ? 'Exit full screen' : 'Expand camera to full screen');
+      btn.title = on ? 'Exit full screen' : 'Full screen';
+      if (icon) icon.innerHTML = on ? collapsePath : expandPath;
+    }
+
+    function isExpanded() {
+      return wrap.classList.contains('camera-fullscreen');
+    }
+
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (isExpanded()) {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          try { await document.exitFullscreen(); } catch (_) {}
+        }
+        setExpanded(false);
+        return;
+      }
+
+      setExpanded(true);
+
+      // Try true browser fullscreen where available.
+      // The CSS fallback remains active if iOS Safari declines it.
+      if (wrap.requestFullscreen) {
+        try { await wrap.requestFullscreen({ navigationUI: 'hide' }); } catch (_) {}
+      } else if (wrap.webkitRequestFullscreen) {
+        try { wrap.webkitRequestFullscreen(); } catch (_) {}
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement && isExpanded()) {
+        // Keep iPhone fallback active if native fullscreen wasn't entered.
+        // If the user explicitly exits native fullscreen, a second tap exits fallback.
+      }
+    });
+
+    // Re-fit instantly when the phone rotates.
+    window.addEventListener('orientationchange', () => {
+      if (isExpanded()) {
+        setTimeout(() => window.scrollTo(0, 0), 80);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (isExpanded()) window.scrollTo(0, 0);
+    });
   })();
 
 </script>
