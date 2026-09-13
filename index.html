@@ -655,9 +655,56 @@
       text-decoration: underline;
       text-underline-offset: 2px;
     }
+    .tide-status {
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      color: rgba(255,255,255,.7);
+      font-size: .64rem;
+      margin: .1rem 0 .8rem;
+    }
+    .tide-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: .55rem;
+    }
+    .tide-item {
+      background: rgba(9,21,32,.62);
+      border: 1px solid rgba(42,168,188,.28);
+      border-radius: 9px;
+      padding: .8rem .45rem;
+      text-align: center;
+    }
+    .tide-type {
+      font-family: 'DM Mono', monospace;
+      font-size: .58rem;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      margin-bottom: .35rem;
+    }
+    .tide-time {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.1rem;
+      color: var(--chalk);
+      line-height: 1.1;
+    }
+    .tide-day {
+      margin-top: .3rem;
+      font-family: 'DM Mono', monospace;
+      font-size: .52rem;
+      color: rgba(255,255,255,.48);
+    }
+    .tide-loading, .tide-error {
+      padding: 1.1rem .5rem;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      color: rgba(255,255,255,.65);
+    }
     @media (max-width: 600px) {
       .conditions-panel { padding: 0 1rem; }
       .conditions-card { padding: .75rem; }
+      .tide-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
 
   </style>
@@ -737,16 +784,15 @@
       <strong id="visitorCount">—</strong>
     </div>
 
-    <div class="conditions-panel" aria-label="Today's Tenby weather and tide times">
+    <div class="conditions-panel" aria-label="Tenby Harbour tide times">
       <div class="conditions-card">
-        <div class="conditions-title">Today's Weather &amp; Tides · Tenby</div>
-        <div class="uktides-widget"
-             data-beach="tenby"
-             data-theme="dark"
-             data-show="tide,airtemp,weather"></div>
+        <div class="conditions-title">Today's Tides · Tenby Harbour</div>
+        <div class="tide-status" id="tideStatus">Loading tide forecast…</div>
+        <div class="tide-grid" id="tideGrid">
+          <div class="tide-loading">Fetching latest tide times…</div>
+        </div>
         <div class="conditions-source">
-          Live tide and weather information ·
-          <a href="https://uktidetimes.lovable.app/" target="_blank" rel="noopener">UK Tide Times</a>
+          Modelled tide forecast from <a href="https://open-meteo.com/en/docs/marine-weather-api" target="_blank" rel="noopener">Open-Meteo Marine</a> · not for navigation
         </div>
       </div>
     </div>
@@ -1064,9 +1110,60 @@
       });
   })();
 
-</script>
+  // Tenby Harbour tides via Open-Meteo Marine API.
+  (() => {
+    const grid = document.getElementById('tideGrid');
+    const status = document.getElementById('tideStatus');
+    if (!grid || !status) return;
 
-  <script src="https://uktidetimes.lovable.app/widget.js" async></script>
+    const url = 'https://marine-api.open-meteo.com/v1/marine?latitude=51.672&longitude=-4.698&minutely_15=sea_level_height_msl&timezone=GMT&timeformat=unixtime&forecast_days=2&cell_selection=sea';
+
+    const fmtTime = iso => new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/London'
+    }).format(new Date(iso * 1000));
+
+    const fmtDay = iso => new Intl.DateTimeFormat('en-GB', {
+      weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/London'
+    }).format(new Date(iso * 1000));
+
+    fetch(url, { cache: 'no-store' })
+      .then(r => { if (!r.ok) throw new Error('Tide service unavailable'); return r.json(); })
+      .then(data => {
+        const times = data.minutely_15?.time || [];
+        const levels = data.minutely_15?.sea_level_height_msl || [];
+        if (times.length < 3 || levels.length !== times.length) throw new Error('No tide data');
+
+        const events = [];
+        for (let i = 1; i < levels.length - 1; i++) {
+          const a = levels[i-1], b = levels[i], c = levels[i+1];
+          if (![a,b,c].every(Number.isFinite)) continue;
+          if (b > a && b >= c) events.push({ type: 'High tide', time: times[i], level: b });
+          if (b < a && b <= c) events.push({ type: 'Low tide', time: times[i], level: b });
+        }
+
+        const now = Date.now();
+        const upcoming = events.filter(e => e.time * 1000 > now - 15*60*1000).slice(0,4);
+        if (!upcoming.length) throw new Error('No upcoming tides');
+
+        const first = upcoming[0];
+        const mins = Math.max(0, Math.round((first.time * 1000 - now) / 60000));
+        const hrs = Math.floor(mins / 60), rem = mins % 60;
+        status.textContent = `Next ${first.type.toLowerCase()} in ${hrs ? hrs + 'h ' : ''}${rem}m`;
+
+        grid.innerHTML = upcoming.map(e => `
+          <div class="tide-item">
+            <div class="tide-type">${e.type}</div>
+            <div class="tide-time">${fmtTime(e.time)}</div>
+            <div class="tide-day">${fmtDay(e.time)}</div>
+          </div>`).join('');
+      })
+      .catch(() => {
+        status.textContent = 'Tide forecast temporarily unavailable';
+        grid.innerHTML = '<div class="tide-error">Please check again shortly.</div>';
+      });
+  })();
+
+</script>
 
 </body>
 </html>
