@@ -1,1 +1,1 @@
-current-video.js
+window.TENBY_YOUTUBE_VIDEO_ID = "F8U1BKaIzQc";
