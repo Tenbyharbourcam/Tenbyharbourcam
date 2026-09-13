@@ -902,6 +902,8 @@
   <a class="footer-enquire" href="mailto:dkcsharris@gmail.com?subject=Sponsorship enquiry – Tenby Harbour Cam">Sponsorship enquiries →</a>
 </footer>
 
+<script src="current-video.js"></script>
+
 <script>
   // Live clock
   function updateClock() {
@@ -920,9 +922,12 @@
   // Set STREAM_URL to your YouTube embed URL or HLS stream URL
   // e.g. "https://www.youtube.com/embed/YOUR_STREAM_ID?autoplay=1&mute=1"
   // ─────────────────────────────────────────────────────────
-  const STREAM_URL = 'https://www.youtube.com/embed/F8U1BKaIzQc?autoplay=1&mute=1&playsinline=1&rel=0'; // YouTube live stream
+  // Current YouTube broadcast ID is stored separately in current-video.js.
+  // The Raspberry Pi can update that tiny file whenever it creates a replacement broadcast.
+  const VIDEO_ID = window.TENBY_YOUTUBE_VIDEO_ID || 'F8U1BKaIzQc';
+  const STREAM_URL = `https://www.youtube.com/embed/${encodeURIComponent(VIDEO_ID)}?autoplay=1&mute=1&playsinline=1&rel=0`;
 
-  if (STREAM_URL) {
+  if (VIDEO_ID) {
     const frame = document.getElementById('stream-frame');
     const placeholder = document.getElementById('placeholder');
     frame.src = STREAM_URL;
