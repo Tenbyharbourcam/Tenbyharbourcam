@@ -937,7 +937,7 @@
   function updateClock() {
     const now = new Date();
     document.getElementById('clock').textContent =
-      now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Europe/London' }) + ' GMT';
+      now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Europe/London', timeZoneName: 'short' });
   }
   updateClock();
   setInterval(updateClock, 1000);
