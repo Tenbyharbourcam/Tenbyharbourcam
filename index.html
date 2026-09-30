@@ -1237,6 +1237,25 @@
       });
   })();
 
+
+  // Desktop wheel zoom + ensure fullscreen button remains clickable
+  (() => {
+    const layer = document.getElementById("cameraZoomLayer");
+    const btn = document.getElementById("cameraFullscreenBtn");
+    if (btn) {
+      btn.style.zIndex = "100001";
+      btn.style.pointerEvents = "auto";
+    }
+    if (layer) {
+      layer.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const factor = e.deltaY < 0 ? 1.12 : 0.89;
+        scale = Math.max(1, Math.min(6, scale * factor));
+        if (scale === 1) { x = 0; y = 0; }
+        applyTransform();
+      }, { passive: false });
+    }
+  })();
 </script>
 
 </body>
