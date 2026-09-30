@@ -1035,7 +1035,7 @@
       const maxY = Math.max(0, r.height * (scale - 1) / 2);
       x = clamp(x, -maxX, maxX);
       y = clamp(y, -maxY, maxY);
-      frame.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      frame.style.transform = scale <= 1.01 ? "none" : `translate(${x}px, ${y}px) scale(${scale})`;
 
       if (hint) {
         hint.textContent = scale > 1.01
