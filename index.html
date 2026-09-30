@@ -767,13 +767,6 @@
 .conditions-panel{margin-top:.45rem!important}
 }
 </style>
-<style id="desktop-width-fix">
-@media (min-width: 900px) {
-  .hero-inner { max-width: 1380px !important; width: 94% !important; }
-  .stream-wrap { max-width: 1380px !important; width: 100% !important; }
-  .conditions-panel { max-width: 1380px !important; width: 100% !important; }
-}
-</style>
 </head>
 <body>
 
@@ -1080,15 +1073,6 @@
         } else {
           lastTap = now;
         }
-      }
-    }, { passive: false });
-
-    wrap.addEventListener("wheel", (e) => {
-      if (window.matchMedia("(pointer:fine)").matches) {
-        if (scale > 1 || e.deltaY < 0) e.preventDefault();
-        scale = Math.max(1, Math.min(6, scale * (e.deltaY < 0 ? 1.12 : 0.89)));
-        if (scale === 1) { x = 0; y = 0; }
-        applyTransform();
       }
     }, { passive: false });
 
