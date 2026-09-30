@@ -744,6 +744,15 @@
 .brett-fees{font-family:Georgia,serif;font-size:10px;white-space:nowrap}
 .brett-fees strong{color:#d7a51e;font-size:16px}
 @media(max-width:640px){.brett-ribbon{grid-template-columns:76px 72px 1fr 145px 116px;gap:3px;height:42px;padding:3px 5px;overflow:hidden}.brett-sponsored{font-size:5.5px;letter-spacing:.5px}.brett-name{font-size:13px}.brett-agents{font-size:6.5px}.brett-valuation{font-size:6.5px;padding:5px 3px}.brett-fees{font-size:6.5px}.brett-fees strong{font-size:11px}}
+
+/* Desktop-only wider camera and conditions panels */
+@media (min-width: 900px) {
+  .hero-inner .stream-wrap,
+  .conditions-panel {
+    width: min(94vw, 1400px) !important;
+    max-width: 1400px !important;
+  }
+}
 </style>
 <style id="tide-layout-fix">
 .conditions-panel{max-width:1180px!important;width:100%!important;box-sizing:border-box!important;padding:0!important}
