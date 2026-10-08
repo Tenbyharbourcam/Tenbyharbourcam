@@ -1103,7 +1103,58 @@
     }, { passive: false });
 
     applyTransform();
-  })();
+    // Desktop mouse zoom and drag
+  const desktopMouse = () => window.matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+  let mouseDrag = null;
+
+  layer.addEventListener('wheel', (e) => {
+    if (!desktopMouse()) return;
+    e.preventDefault();
+    const r = layer.getBoundingClientRect();
+    const px = e.clientX - r.left - r.width / 2;
+    const py = e.clientY - r.top - r.height / 2;
+    const next = clamp(scale * (e.deltaY < 0 ? 1.2 : 1 / 1.2), 1, 6);
+    const ratio = next / scale;
+    x = px + (x - px) * ratio;
+    y = py + (y - py) * ratio;
+    scale = next;
+    if (scale <= 1.01) { x = 0; y = 0; }
+    applyTransform();
+  }, { passive: false });
+
+  layer.addEventListener('pointerdown', (e) => {
+    if (!desktopMouse() || e.pointerType !== 'mouse' || e.button !== 0 || scale <= 1) return;
+    mouseDrag = { px: e.clientX, py: e.clientY, x, y };
+    layer.setPointerCapture(e.pointerId);
+    layer.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+
+  layer.addEventListener('pointermove', (e) => {
+    if (!mouseDrag) return;
+    x = mouseDrag.x + e.clientX - mouseDrag.px;
+    y = mouseDrag.y + e.clientY - mouseDrag.py;
+    applyTransform();
+  });
+
+  const endMouseDrag = () => {
+    mouseDrag = null;
+    layer.style.cursor = '';
+  };
+  layer.addEventListener('pointerup', endMouseDrag);
+  layer.addEventListener('pointercancel', endMouseDrag);
+
+  layer.addEventListener('dblclick', (e) => {
+    if (!desktopMouse()) return;
+    e.preventDefault();
+    mouseDrag = null;
+    scale = 1;
+    x = 0;
+    y = 0;
+    applyTransform();
+  });
+
+})();
 
   // Full-screen camera button. Uses browser fullscreen when supported,
   // with a viewport-filling fallback that works well on iPhone/iPad.
